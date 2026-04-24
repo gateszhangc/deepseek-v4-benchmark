@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deepseek-v4-benchmark
+  labels:
+    app.kubernetes.io/name: deepseek-v4-benchmark
+    app.kubernetes.io/part-of: deepseek-v4-benchmark
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: deepseek-v4-benchmark
+      app.kubernetes.io/part-of: deepseek-v4-benchmark
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: deepseek-v4-benchmark
+        app.kubernetes.io/part-of: deepseek-v4-benchmark
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: DoesNotExist
+      containers:
+        - name: web
+          image: registry.144.91.77.245.sslip.io/deepseek-v4-benchmark:bootstrap
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: PORT
+              value: "3000"
+            - name: HOSTNAME
+              value: 0.0.0.0
+          ports:
+            - name: http
+              containerPort: 3000
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            failureThreshold: 30
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi

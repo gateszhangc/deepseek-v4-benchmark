@@ -58,8 +58,10 @@ Cloudflare is the DNS authority for `deepseekv4benchmark.lol`.
 
 Expected records:
 
-- apex `A` -> `89.167.61.228`
+- apex `A` records should mirror the current IPv4 values from:
+  `kubectl -n deepseek-v4-benchmark get ingress deepseek-v4-benchmark -o jsonpath='{.status.loadBalancer.ingress[*].ip}'`
 - `www` `CNAME` -> `deepseekv4benchmark.lol`
+- Current rollout uses `DNS only` records in Cloudflare so Let's Encrypt HTTP-01 validation can complete against the ingress directly.
 
 GSC scope:
 

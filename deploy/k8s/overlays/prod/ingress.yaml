@@ -7,7 +7,6 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     cert-manager.io/issue-temporary-certificate: "true"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
 spec:
   ingressClassName: nginx
   tls:
@@ -17,6 +16,16 @@ spec:
         - www.deepseekv4benchmark.lol
   rules:
     - host: deepseekv4benchmark.lol
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: deepseek-v4-benchmark
+                port:
+                  number: 80
+    - host: www.deepseekv4benchmark.lol
       http:
         paths:
           - path: /

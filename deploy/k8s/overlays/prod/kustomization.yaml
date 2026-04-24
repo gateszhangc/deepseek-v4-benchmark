@@ -5,4 +5,4 @@ resources:
   - ingress.yaml
 images:
   - name: registry.144.91.77.245.sslip.io/deepseek-v4-benchmark
-    newTag: 2ff2a4755ef3d108d4519a520ebc9f3fc6b662c1
+    newTag: 88ffc7ed1599dad2343e5c3826ae8cb7ab1aaa8e

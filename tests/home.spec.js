@@ -16,6 +16,9 @@ test.describe("DeepSeek V4 benchmark site", () => {
     );
 
     await expect(page.getByRole("link", { name: "View comparison" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "View comparison" })).toHaveAttribute("href", "https://mirofish.my/");
+    await expect(page.getByRole("link", { name: "View comparison" })).toHaveAttribute("target", "_blank");
+    await expect(page.getByRole("link", { name: "View comparison" })).toHaveAttribute("rel", "noreferrer noopener");
     await expect(page.getByRole("link", { name: "Read methodology" })).toHaveAttribute("href", "https://mirofish.my/");
     await expect(page.getByRole("link", { name: "Read methodology" })).toHaveAttribute("target", "_blank");
     await expect(page.getByRole("link", { name: "Read methodology" })).toHaveAttribute("rel", "noreferrer noopener");
@@ -44,7 +47,7 @@ test.describe("DeepSeek V4 benchmark site", () => {
     await expect(page.locator('script[src*="clarity"]')).toHaveCount(0);
   });
 
-  test("mobile layout stays inside viewport and comparison anchor navigation works", async ({ browser }) => {
+  test("mobile layout stays inside viewport with external hero CTAs", async ({ browser }) => {
     const context = await browser.newContext({
       viewport: { width: 390, height: 844 },
       isMobile: true
@@ -54,8 +57,9 @@ test.describe("DeepSeek V4 benchmark site", () => {
     await page.goto("/");
 
     await expect(page.locator("h1")).toBeVisible();
-    await page.getByRole("link", { name: "View comparison" }).click();
-    await expect(page.locator("#comparison")).toBeInViewport();
+    await expect(page.getByRole("link", { name: "View comparison" })).toHaveAttribute("href", "https://mirofish.my/");
+    await expect(page.getByRole("link", { name: "View comparison" })).toHaveAttribute("target", "_blank");
+    await expect(page.getByRole("link", { name: "Read methodology" })).toHaveAttribute("href", "https://mirofish.my/");
 
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     expect(overflow).toBeLessThanOrEqual(1);

@@ -16,6 +16,9 @@ test.describe("DeepSeek V4 benchmark site", () => {
     );
 
     await expect(page.getByRole("link", { name: "View comparison" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Read methodology" })).toHaveAttribute("href", "https://mirofish.my/");
+    await expect(page.getByRole("link", { name: "Read methodology" })).toHaveAttribute("target", "_blank");
+    await expect(page.getByRole("link", { name: "Read methodology" })).toHaveAttribute("rel", "noreferrer noopener");
     await expect(page.locator("#snapshot .snapshot-card")).toHaveCount(4);
     await expect(page.locator("#comparison .comparison-table")).toBeVisible();
     await expect(page.locator(".source-chip")).toHaveCount(8);
@@ -41,7 +44,7 @@ test.describe("DeepSeek V4 benchmark site", () => {
     await expect(page.locator('script[src*="clarity"]')).toHaveCount(0);
   });
 
-  test("mobile layout stays inside viewport and anchor navigation works", async ({ browser }) => {
+  test("mobile layout stays inside viewport and comparison anchor navigation works", async ({ browser }) => {
     const context = await browser.newContext({
       viewport: { width: 390, height: 844 },
       isMobile: true
